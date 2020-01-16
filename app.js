@@ -18,7 +18,7 @@ const {Pool,Client}=require("pg");
 server.prepare().then(() => {
   const app = express()
   app.use(express.json());
-  app.use(morgan('combined'))
+ // app.use(morgan('combined'))
 
   const connectionString= `postgressql://postgres:${config.get("postgresPass")}@localhost:5432/onlineLottery`
   const User= new Client({
@@ -283,6 +283,7 @@ app.get("/getUsers",async (req,res)=>{
     }
 })
 
+
 app.get("/getUser/:paymentId", async (req,res)=>{
     try{
         const {paymentId}=req.params
@@ -360,6 +361,31 @@ app.put("/updateUsername/:id",[check("newUsername", "username must be more than 
     }
 });
 
+app.get("/winner",async (req,res)=>{
+   
+    try{
+        let fullDate="12/1/2020"
+        const date= new Date()
+        const time=getTheTime()
+    /*
+                if(time > "22:01:00" || time < "10:00:00"){
+                    fullDate=date.getDate()+"/"+ (date.getMonth()+1) +"/"+date.getFullYear();
+                }else{
+                    fullDate= (date.getDate()-1) +"/"+date.getMonth()+1+"/"+date.getFullYear();
+                }
+                */
+        //console.log(fullDate)
+        const winnerText="SELECT winner,totalamountofmoney,lotteryid FROM lotteries.singlelottery WHERE dateandtimeofopening LIKE upper('%' || $1 || '%')"
+        const winnerValues=[fullDate]
+        const win= await Lottery.query(winnerText, winnerValues)
+        //console.log(win.rows[0])
+            const {winner, totalamountofmoney, lotteryid}=win.rows[0]
+                res.json({winner , totalamountofmoney, lotteryid})
+    }catch(error){
+        console.log(error)
+    }  
+});
+
   app.all('*', (req, res) => {
     return handle(req, res)
   });
@@ -373,7 +399,7 @@ app.put("/updateUsername/:id",[check("newUsername", "username must be more than 
       
              const fullDate=getTheDate();
          const text = 'INSERT INTO lotteries.singlelottery(dateandtimeofopening, dateandtimeofclosing, dateandtimeoflottery, totalamountofmoney) VALUES($1, $2, $3, $4) RETURNING *'
-         const values=[`${fullDate}`+` `+`${time}`, `${fullDate} 20:50:00`,`${fullDate} 20:50:00`, 0]
+         const values=[`${fullDate}`+` `+`${time}`, `${fullDate} 21:50:00`,`${fullDate} 21:50:00`, 0]
 
          Lottery.query(text,values,(err, res)=>{
              if(err){
@@ -383,7 +409,7 @@ app.put("/updateUsername/:id",[check("newUsername", "username must be more than 
              }
          });    
      }
-     if(time==="21:50:00"){
+     if(time==="22:00:00"){
         try{
            const lotteryid= await Lottery.query("SELECT lotteryid,totalamountofmoney FROM  lotteries.singlelottery WHERE lotteryid = (SELECT MAX(lotteryid) FROM lotteries.singlelottery)")
            

@@ -1,0 +1,55 @@
+body{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.navb{
+    display: flex; 
+    position: relative;
+    flex-direction: column;
+    /*justify-content: space-between;
+    height:90px;
+    */
+    align-items: center;
+    background-color: burlywood;
+  }
+
+.title{
+    margin:0 auto;
+    font-size:2rem ;
+}
+
+.navb-links{
+    width:100%  
+}
+
+.navb-links-ul{
+    display:flex;
+    justify-content:center;
+    margin:0;
+    padding:0;
+
+}
+
+li{
+    list-style-type: none;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.form-div{
+    text-align:center
+}
+
+.lottery-btn{
+    padding:10px;
+    
+}
+
+.description{
+    text-align: center;
+}
+
+.take-part{
+    text-align: center;
+}

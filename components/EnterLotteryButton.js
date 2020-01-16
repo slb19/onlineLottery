@@ -2,23 +2,34 @@ import React,{Fragment, useState, useEffect, useRef} from 'react'
  
 const EnterLotteryButton=(props)=>{
 
+    const {hours , minutes, seconds }= props.countdown
+
 useEffect(()=>{
     props.registerHandler()
          
-}, [props.errorRegister]);
+}/*,[props.errorRegister]*/);
+
+let date=new Date()
+let month=date.getMonth()+1
+let fullDate=date.getDate()+"/"+month+"/"+date.getFullYear();
 
     return(
         <Fragment>
             
             {props.errorRegister && <p>Lottery has closed ..Wait for the next one</p>}
-            <h4>Take part to the next lottery with 5 euros</h4>
-               
+            <h4 className="take-part">Take part to the lottery with 5 euros</h4>
+                <div>
+{!props.errorRegister && <p>Actual Lottery will close in {fullDate} at 21:50 Time Remaining <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></p>}
+                    
+                </div>
+                <div className="form-div">   
                <form action="/register" method="POST">
-               {props.errorRegister ? <button type="button" disabled >Enter the next Lottery</button> 
+               {props.errorRegister ? <button className="btn btn-danger lottery-btn" type="button" disabled >Enter the next Lottery</button> 
                                         :
-                 <button onClick={props.startLoading}>Enter the next Lottery!</button>
+                 <button className="btn btn-primary lottery-btn" onClick={props.startLoading}>Take part to the Lottery!</button>
                } 
                 </form> 
+                </div>  
                     
         </Fragment>
     )

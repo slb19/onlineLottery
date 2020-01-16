@@ -1,6 +1,8 @@
 import React,{useState, useEffect, Fragment} from 'react'
 import { withRouter } from 'next/router'
 import Link from "next/Link"
+import Head from 'next/head';
+import Navbar from "../components/layout/Navbar.js"
 import RandomUsername from "../components/RandomUsername.js"
 import CustomUsername from "../components/CustomUsername.js"
 import UsersLottery from "../components/UsersLottery.js"
@@ -33,8 +35,13 @@ const enterLottery=(props)=>{
     let {id}=user
     
    useEffect(()=>{
-    if(paymentId && user.username!==null) getAllUsers()
+    const abortController= new AbortController()
+    const signal=abortController.signal
+    if(paymentId && user.username!==null) getAllUsers(signal)
 
+        return function cleanup(){
+            abortController.abort()
+        }
    },[user])
 
     const getUser=(paymentId)=>{
@@ -54,9 +61,10 @@ const enterLottery=(props)=>{
         });
     }
 
-    const getAllUsers=()=>{
+    const getAllUsers=(signal)=>{
         //console.log("frm get All Users")
         fetch("http://localhost:3000/getUsers", {
+            signal:signal,
             method:"GET"
         }).then(res=>{
             return res.json()
@@ -126,9 +134,15 @@ if(paymentId && user.username===null) getUser(paymentId)
 
 return(
     <div>
+        <Head>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
+                <link href="styles.css" rel="stylesheet" />
+        </Head>
+
  {user.loading  ? <Spinner/>
                 :
                 <Fragment>
+                    <Navbar />
         <h4>Your payment is complete</h4>
                 
                 
