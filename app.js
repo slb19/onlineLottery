@@ -54,8 +54,10 @@ const Lottery= new Client({
     'client_secret': config.get("client_secret")
   });
 
+
   app.post("/register", (req,res)=>{
-   
+   try{
+
     const time=getTheTime();
         
     if(time > "21:50:00" || time < "10:00:00"){
@@ -104,6 +106,9 @@ const Lottery= new Client({
             });
         }
     });
+    }catch(error){
+        console.log(error)
+    }
   });
 
   app.get("/register", (req,res)=>{
@@ -218,7 +223,7 @@ const Lottery= new Client({
                 if(length<=3){
                     while(length<=3){
                   length+=(Math.floor(Math.random() * 12))
-                  console.log(length)
+                  //console.log(length)
                     }
                 }
                  let username = "";
@@ -502,6 +507,6 @@ setInterval(lottery,1000)
 
   app.listen(port, err => {
     if (err) throw err
-    console.log(`> Ready on http://localhost:${port}`)
+    console.log(`Ready on http://localhost:${port}`)
   })
 })
