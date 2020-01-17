@@ -33,14 +33,18 @@ const Lottery= new Client({
 
     const getTheTime=()=>{
         let d=new Date();
-        let time=d.toLocaleTimeString();
+        const hours=("0"+d.getHours()).slice(-2)
+        const minutes=("0"+ d.getMinutes()).slice(-2)
+        const seconds=("0"+ d.getSeconds()).slice(-2)
+            let time=`${hours}:${minutes}:${seconds}`
+        //let time=d.toLocaleTimeString();
             return time
     }
 
     const getTheDate=()=>{
         let date=new Date()
-        let month=date.getMonth()+1
-        let fullDate=date.getDate()+"/"+month+"/"+date.getFullYear();
+        //let month=date.getMonth()+1
+        let fullDate=date.getDate()+"/"+date.getMonth()+1+"/"+date.getFullYear();
             return fullDate
     }
 
@@ -53,7 +57,7 @@ const Lottery= new Client({
   app.post("/register", (req,res)=>{
    
     const time=getTheTime();
-
+        
     if(time > "21:50:00" || time < "10:00:00"){
         
            // return res.status(403).json({fail:"Lottery has closed ..Wait for the next one"}) 
@@ -104,7 +108,7 @@ const Lottery= new Client({
 
   app.get("/register", (req,res)=>{
     const time=getTheTime();
-
+    //console.log(time)
     if(time > "21:50:00" || time < "10:00:00"){
         //console.log("why ?")
            return res.json({fail:"Lottery has closed ..Wait for the next one"}) 
@@ -364,16 +368,19 @@ app.put("/updateUsername/:id",[check("newUsername", "username must be more than 
 app.get("/winner",async (req,res)=>{
    
     try{
-        let fullDate="12/1/2020"
+        let fullDate
         const date= new Date()
+        //console.log(date.getMonth())
         const time=getTheTime()
-    /*
-                if(time > "22:01:00" || time < "10:00:00"){
-                    fullDate=date.getDate()+"/"+ (date.getMonth()+1) +"/"+date.getFullYear();
+    
+                if(time > "22:01:00"){
+                   fullDate=date.getDate()+"/"+ date.getMonth()+1 +"/"+date.getFullYear();
+                   //fullDate=getTheDate()
+                   
                 }else{
                     fullDate= (date.getDate()-1) +"/"+date.getMonth()+1+"/"+date.getFullYear();
                 }
-                */
+                
         //console.log(fullDate)
         const winnerText="SELECT winner,totalamountofmoney,lotteryid FROM lotteries.singlelottery WHERE dateandtimeofopening LIKE upper('%' || $1 || '%')"
         const winnerValues=[fullDate]
@@ -393,13 +400,14 @@ app.get("/winner",async (req,res)=>{
   const lottery=async ()=>{
     
     const time=getTheTime();
-     //console.log(time);
+     console.log(time);
 
-     if(time==="10:00:00"){       
+     if(time==="10:41:00"){       
       
              const fullDate=getTheDate();
+        
          const text = 'INSERT INTO lotteries.singlelottery(dateandtimeofopening, dateandtimeofclosing, dateandtimeoflottery, totalamountofmoney) VALUES($1, $2, $3, $4) RETURNING *'
-         const values=[`${fullDate}`+` `+`${time}`, `${fullDate} 21:50:00`,`${fullDate} 21:50:00`, 0]
+         const values=[`${fullDate}`+` `+`${time}`, `${fullDate} 21:50:00`,`${fullDate} 22:00:00`, 0]
 
          Lottery.query(text,values,(err, res)=>{
              if(err){
