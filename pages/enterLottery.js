@@ -7,6 +7,7 @@ import RandomUsername from "../components/RandomUsername.js"
 import CustomUsername from "../components/CustomUsername.js"
 import UsersLottery from "../components/UsersLottery.js"
 import Spinner from "../components/layout/Spinner.js" 
+import Check from "../components/layout/Check.js" 
 
 const enterLottery=(props)=>{
     const { router } = props
@@ -135,6 +136,7 @@ if(paymentId && user.username===null) getUser(paymentId)
 return(
     <div>
         <Head>
+          <link href="https://fonts.googleapis.com/css?family=Cantarell&display=swap" rel="stylesheet"/> 
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
                 <link href="styles.css" rel="stylesheet" />
         </Head>
@@ -143,26 +145,34 @@ return(
                 :
                 <Fragment>
                     <Navbar />
-        <h4>Your payment is complete</h4>
+                    <div className='container enter-lottery'>
+                        <div className="row">
+                        <div className="col-lg-6 col-md-12 col-sm-12">
+        <h3 className="payment-title">Your payment is complete <Check/> </h3>
                 
-                
+                <div className="jumbotron jumbotron-extra">
                 {!user.updatedUsername && user.hotReload && !user.updateUser && <RandomUsername username={user.username}/> }
                 {user.updatedUsername && <CustomUsername username={user.username}/>} 
                      
-                        {user.fail && <div><p>{user.fail}</p></div>} 
+                        {user.fail && <div className="fail-container"><p style={{margin:"6px"}}>{user.fail}</p></div>} 
     
                         <form onSubmit={onSubmit}>
-                            <label htmlFor="email">email</label><br/>
-                            <input type="email" name="email" placeholder="email" value={updateUsernameForm.email} onChange={onChange}  required />
-                            <label htmlFor="New username">New username</label><br/>
-                            <input type="text" name="newUsername" placeholder="New username" value={updateUsernameForm.newUsername} onChange={onChange}  required />
-                            <input type="submit" value="change username" />
+                            <label className="label-username" htmlFor="email"><b>Email</b></label><br/>
+                                <input className="input-username" type="email" name="email" placeholder="email..." value={updateUsernameForm.email} onChange={onChange}  required /><br/>
+                            <label className="label-username" htmlFor="New username"><b>New Username</b></label><br/>
+                                <input className="input-username" type="text" name="newUsername" placeholder="New username..." value={updateUsernameForm.newUsername} onChange={onChange}  required /><br/>
+                            <input className="btn btn-primary" type="submit" value="change Username" />
                         </form>
-                    <p>if you are ok press <Link href="/"><button onClick={okToggler}>OK</button></Link></p>
-                        <h4>There are {users.length} Entries to this lottery ! money played : {money}</h4>
-                          
+                    <p style={{textAlign:"center", marginTop:"18px"}}>Are you done ? Press here <Link href="/"><button className="btn btn-success" onClick={okToggler}>OK</button></Link></p>
+                           </div>
+                          </div>
+
+                          <div className="col-lg-6 col-md-12 col-sm-12">
+                          <h5 className="entries-title">There are {users.length} Entries to this lottery ! money played : {money}</h5>
                             <UsersLottery  users={users}/>
-                                     
+                            </div>
+                           </div>
+                        </div>    
                     </Fragment>
         }
     </div>

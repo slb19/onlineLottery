@@ -147,7 +147,7 @@ const Lottery= new Client({
         //return res.status(423).end(`The paymentId ${paymentId} is locked for another charge`)
         return server.render(req,res,"/enterLottery")
      }
-
+     try{
     const execute_payment_json = {
         "payer_id":payerId,
         "transactions": [{
@@ -161,9 +161,9 @@ const Lottery= new Client({
         if (error) {
             console.log(error.response);
             res.status(error.response.httpStatusCode).send(error.response.message)
-            throw error;  
+            //throw error;  
         } else {
-            try{
+            //try{
             const newEntry=JSON.stringify(payment);
             const newEntryObj=JSON.parse(newEntry);
                     //console.log(newEntryObj)
@@ -262,15 +262,18 @@ const Lottery= new Client({
                     //res.status(201).json({"user":userData.rows[0], "lotteryEntry":userLotteryEntry.rows[0]});
                     //res.status(201).render("pay.ejs", {username:username, id:userData.rows[0].userid, fail:undefined, updatedUsername:undefined});
                     return server.render(req,res,"/enterLottery")
-
+                /*
                 }catch(error){
                     console.log(error);
                     res.status(500).send("Server Error")
                 }   
-           
+           */
             }
         });
-
+        }catch(error){
+            console.log(error);
+            res.status(500).send("Server Error")
+        }   
       }
    })
 });
@@ -407,7 +410,7 @@ app.get("/winner",async (req,res)=>{
     const time=getTheTime();
      console.log(time);
 
-     if(time==="10:41:00"){       
+     if(time==="13:31:00"){       
       
              const fullDate=getTheDate();
         

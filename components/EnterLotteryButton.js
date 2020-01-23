@@ -15,7 +15,7 @@ let fullDate=date.getDate()+"/"+month+"/"+date.getFullYear();
 
     return(
         <Fragment>
-            
+          
             {props.errorRegister && <p>Lottery has closed ..Wait for the next one</p>}
             <h4 className="take-part">Take part to the lottery with 5 euros</h4>
                 <div>

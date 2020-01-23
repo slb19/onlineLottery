@@ -2,7 +2,7 @@
 const UsersLottery=({users})=>{
 
     return(
-        <div>
+        <div className="users-container">
             {users.map((user, index)=>{
                 return <p key={index}>{user}</p>
             })} 

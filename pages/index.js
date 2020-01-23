@@ -29,7 +29,7 @@ const Index=(props)=>{
     });
 
     //console.log(countdown)
-
+   //console.log(winner)
     useEffect(()=>{
         if(paymentId) getMoneyBack(paymentId)
            if(!loading) getWinner();
@@ -183,7 +183,10 @@ const Index=(props)=>{
                            
                                 {moneyBack && <p>There is no lottery open at the momment. We have returned your money back to your Pay Pal account</p>}
                                     {!errorRegister && <p>There are {users.length} users now in this Lottery! money played : {money}</p> }
-                                       <div>Winner of lottery {winner.lotteryid} is {winner.username} and won {winner.moneyWon} euros</div>
+                                    
+                                       {(winner.username!=="NoEntries" && winner.username!==null) && <div>Winner of lottery {winner.lotteryid} is {winner.username} and won {winner.moneyWon} euros</div>} 
+                                          {winner.username==="NoEntries" && <div>There were no entries for lottery {winner.lotteryid} .Moneys played were 0 euros</div>}             
+                                            {winner.username===null && <div>Lottery {winner.lotteryid} was cancelled </div>}  
                     <div>
                         <p>Entries for the next Lottery will start on {nextDayLot()} at 10:00 and will be open until {nextDayLot()} at 22:00
                             <br />
