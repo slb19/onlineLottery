@@ -9,6 +9,12 @@ import UsersLottery from "../components/UsersLottery.js"
 import Spinner from "../components/layout/Spinner.js" 
 import Check from "../components/layout/Check.js" 
 
+// let AbortController
+// if (process.browser) {
+//     AbortController = window.AbortController
+//   }
+
+
 const enterLottery=(props)=>{
     const { router } = props
     // console.log(router.query.paymentId)
@@ -36,6 +42,7 @@ const enterLottery=(props)=>{
     let {id}=user
     
    useEffect(()=>{
+    
     const abortController= new AbortController()
     const signal=abortController.signal
     if(paymentId && user.username!==null) getAllUsers(signal)
@@ -77,6 +84,7 @@ const enterLottery=(props)=>{
             setMoney(data.money)
         }).catch(error=>{
             console.log(error)
+            if(errror.name="AbortError") return;
         });
     }
 //console.log(users)
@@ -154,7 +162,7 @@ return(
                 {!user.updatedUsername && user.hotReload && !user.updateUser && <RandomUsername username={user.username}/> }
                 {user.updatedUsername && <CustomUsername username={user.username}/>} 
                      
-                        {user.fail && <div className="fail-container"><p style={{margin:"6px"}}>{user.fail}</p></div>} 
+                        {user.fail && <div className="fail-container"><p style={{margin:"6px"}}><b>{user.fail}</b></p></div>} 
     
                         <form onSubmit={onSubmit}>
                             <label className="label-username" htmlFor="email"><b>Email</b></label><br/>

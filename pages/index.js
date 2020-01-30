@@ -1,10 +1,14 @@
-import React,{useState, useEffect, Fragment} from 'react'
+import React,{useState, useEffect,useContext ,Fragment} from 'react'
 import { withRouter } from 'next/router'
 import Head from 'next/head';
 //import "materialize-css/dist/css/materialize.min.css";
 import EnterLotteryButton from "../components/EnterLotteryButton.js"
 import Navbar from "../components/layout/Navbar.js"
 import Spinner from "../components/layout/Spinner.js" 
+import Description from '../components/Description.js';
+import PreviousLotteries from '../components/PreviousLotteries.js';
+import Contact from '../components/Contact.js';
+import PreviousLotteriesState from "../context/previousLotteries/previousLotteriesState.js"
 
 const Index=(props)=>{
 
@@ -12,6 +16,7 @@ const Index=(props)=>{
     // console.log(router.query.paymentId)
      const paymentId=router.query.paymentId
     //console.log(paymentId)
+
     const [errorRegister, setErrorRegister]=useState(false)
     const [moneyBack, setMoneyBack]=useState(false)   
     const [users, setUsers]=useState([])
@@ -28,6 +33,12 @@ const Index=(props)=>{
         seconds:""
     });
 
+    const [sideShow , setSideShow]=useState({
+        description:true,
+        previousLotteries:false,
+        contact:false
+    })
+
     //console.log(countdown)
    //console.log(winner)
     useEffect(()=>{
@@ -35,11 +46,12 @@ const Index=(props)=>{
            if(!loading) getWinner();
         //
        // console.log("useeffect")        
-    });
+    },[]);
 
     useEffect(()=>{
        
         getAllUsers()
+
         setInterval(()=>{
             const hours=("0"+getCountdown().hours).slice(-2)
             const minutes=("0"+ getCountdown().minutes).slice(-2)
@@ -47,6 +59,10 @@ const Index=(props)=>{
                 //console.log(hours , minutes, seconds) 
             setCountdown({hours , minutes, seconds})
          },1000)
+
+        //  if(sideShow.previousLotteries){
+        //     getLotteries()
+        //  }
     },[])
 
     const registerHandler=()=>{
@@ -166,7 +182,6 @@ const Index=(props)=>{
              });
     }
     
-
     if(loading) return <Spinner />
    
     return(
@@ -175,7 +190,7 @@ const Index=(props)=>{
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
                 <link href="styles.css" rel="stylesheet" />
             </Head>
-                <Navbar />
+                <Navbar setSideShow={setSideShow}/>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12">
@@ -184,9 +199,10 @@ const Index=(props)=>{
                                 {moneyBack && <p>There is no lottery open at the momment. We have returned your money back to your Pay Pal account</p>}
                                     {!errorRegister && <p>There are {users.length} users now in this Lottery! money played : {money}</p> }
                                     
-                                       {(winner.username!=="NoEntries" && winner.username!==null) && <div>Winner of lottery {winner.lotteryid} is {winner.username} and won {winner.moneyWon} euros</div>} 
+                                       {(winner.username!=="NoEntries" && winner.username!==null && winner.username!=="") && <div>Winner of lottery {winner.lotteryid} is {winner.username} and won {winner.moneyWon} euros</div>} 
                                           {winner.username==="NoEntries" && <div>There were no entries for lottery {winner.lotteryid} .Moneys played were 0 euros</div>}             
-                                            {winner.username===null && <div>Lottery {winner.lotteryid} was cancelled </div>}  
+                                            {winner.username===null && <div>Lottery {winner.lotteryid} was cancelled </div>}
+                                                 
                     <div>
                         <p>Entries for the next Lottery will start on {nextDayLot()} at 10:00 and will be open until {nextDayLot()} at 22:00
                             <br />
@@ -195,8 +211,10 @@ const Index=(props)=>{
                     </div>
                     </div>
                     <div className="col-lg-6 col-md-12 col-sm-12">
-                        <div className="container">
-                        <h4 className="description">Description</h4>
+                        <div className="container cent">
+                            {sideShow.description && <Description />}
+                            {sideShow.previousLotteries && <PreviousLotteriesState><PreviousLotteries /> </PreviousLotteriesState>}
+                            {sideShow.contact && <Contact />}
                         </div>
                        </div>
                     </div>

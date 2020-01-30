@@ -18,6 +18,7 @@ body{
     */
     align-items: center;
     background-color: burlywood;
+    height:10vh
   }
 
 .title{
@@ -26,7 +27,9 @@ body{
 }
 
 .navb-links{
-    width:100%  
+    width:100% ;
+    position:absolute;
+    top:48px; 
 }
 
 .navb-links-ul{
@@ -43,6 +46,12 @@ li{
     margin-right:10px;
 }
 
+li:hover{
+    color: 	#0000FF;
+    font-size: 1.1em;
+    cursor:pointer;
+}
+
 .form-div{
     text-align:center
 }
@@ -52,7 +61,7 @@ li{
     
 }
 
-.description{
+.cent{
     text-align: center;
 }
 
@@ -62,7 +71,7 @@ li{
 
 .jumbotron-extra{
     border:solid 2px #7D7C7C;
-    box-shadow: -1px 14px 22px 1px rgba(0, 0, 0, 0.45)
+    box-shadow: 5px 10px 20px 1px rgba(0, 0, 0, 0.35)
 
 }
 .users-container{
@@ -70,7 +79,7 @@ li{
 }
 .enter-lottery{
     margin-top:30px;
-    font-family:var(--main-font-1)
+    /*font-family:var(--main-font-1)*/
 }
 .payment-title{
     text-align:center;
@@ -98,4 +107,6 @@ li{
     background-color:#E76769;
     border-radius:5px;
     text-align:center;
+    border:solid #7D7C7C 2px;
+    color:white
 }

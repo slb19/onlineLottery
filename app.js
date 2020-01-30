@@ -57,7 +57,7 @@ const Lottery= new Client({
 
   app.post("/register", (req,res)=>{
    try{
-
+    
     const time=getTheTime();
         
     if(time > "21:50:00" || time < "10:00:00"){
@@ -112,6 +112,7 @@ const Lottery= new Client({
   });
 
   app.get("/register", (req,res)=>{
+      
     const time=getTheTime();
     //console.log(time)
     if(time > "21:50:00" || time < "10:00:00"){
@@ -241,7 +242,7 @@ const Lottery= new Client({
             const username=createRandomUsername(length);
               //console.log(username)  
             const email=newEntryObj.payer.payer_info.email;
-            const pass="*******"
+            const pass="*******" //Password is not being used
 
                 const userText = 'INSERT INTO users.users(username, email, pass) VALUES($1, $2, $3) RETURNING *'
                 const userValues=[username, email, pass];
@@ -315,7 +316,8 @@ app.get("/getUser/:paymentId", async (req,res)=>{
     }
 });
 
-app.put("/updateUsername/:id",[check("newUsername", "username must be more than 2 and less than 16 characters").isLength({min:3, max:15})], async (req,res)=>{
+app.put("/updateUsername/:id",[check("newUsername", "username must be more than 2 and less than 16 characters").isLength({min:3, max:15}),
+                                check("email", "This is not a valid Email").isEmail()], async (req,res)=>{
 
     try{
         //console.log(req.body)
@@ -393,13 +395,24 @@ app.get("/winner",async (req,res)=>{
         const winnerText="SELECT winner,totalamountofmoney,lotteryid FROM lotteries.singlelottery WHERE dateandtimeofopening LIKE upper('%' || $1 || '%')"
         const winnerValues=[fullDate]
         const win= await Lottery.query(winnerText, winnerValues)
-        //console.log(win.rows[0])
+        //console.log(win)
+        if(win.rows.length===0) return ;
             const {winner, totalamountofmoney, lotteryid}=win.rows[0]
                 res.json({winner , totalamountofmoney, lotteryid})
     }catch(error){
         console.log(error)
     }  
 });
+
+app.get("/lotteries", async (req, res)=>{
+    
+    try{
+        const lotteries= await Lottery.query("SELECT lotteryid AS Lottery_No , dateandtimeoflottery AS Date, winner, totalamountofmoney AS Has_Won FROM lotteries.singlelottery ORDER BY lotteryid ")
+        res.json(lotteries.rows)
+    }catch(error){
+        console.log(error)
+    }
+})
 
   app.all('*', (req, res) => {
     return handle(req, res)
@@ -408,9 +421,9 @@ app.get("/winner",async (req,res)=>{
   const lottery=async ()=>{
     
     const time=getTheTime();
-     console.log(time);
+    //console.log(time);
 
-     if(time==="13:31:00"){       
+     if(time==="10:00:00"){       
       
              const fullDate=getTheDate();
         
