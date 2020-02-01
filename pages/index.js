@@ -158,15 +158,70 @@ const Index=(props)=>{
 
     const nextDayLot=()=>{
         let date=new Date()
-            let month=date.getMonth()+1
             
+            let month=date.getMonth()+1
+            let year=date.getFullYear()
+            
+            if (month<10) {
+                month="0"+ month;
+              }
+
+            if(month==="01" || month==="03" || month==="05" || month==="07" || month==="08" || month==="10" || month==="12"){
                 if(date.getDate()+1>31){
                     let fullDate="01"+"/"+month+"/"+date.getFullYear();
                     return fullDate
                 }else{
-                    let fullDate=(date.getDate()+1)+"/"+month+"/"+date.getFullYear();
+                    let day=date.getDate()+1
+                    if (day < 10) {
+                        day ="0"+ day;
+                      } 
+                    let fullDate=(day+"/"+month+"/"+date.getFullYear());
                     return fullDate
                 }
+              }
+              else if(month==="04" || month==="06" || month==="09" || month==="11"){
+                if(date.getDate()+1>30){
+                    let fullDate="01"+"/"+month+"/"+date.getFullYear();
+                    return fullDate
+                }else{
+                    let day=date.getDate()+1
+                    if (day < 10) {
+                        day ="0"+ day;
+                      } 
+                    let fullDate=(day+"/"+month+"/"+date.getFullYear());
+                    return fullDate
+                }
+              }
+              else if(month==="02"){
+                const leapYear= ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+                    if(leapYear){
+                        if(date.getDate()+1>29){
+                            let fullDate="01"+"/"+month+"/"+date.getFullYear();
+                            return fullDate
+                        }else{
+                            let day=date.getDate()+1
+                            if (day < 10) {
+                                day ="0"+ day;
+                              } 
+                            let fullDate=(day+"/"+month+"/"+date.getFullYear());
+                            return fullDate
+                        }
+                    }
+                    else{
+                        if(date.getDate()+1>28){
+                            let fullDate="01"+"/"+month+"/"+date.getFullYear();
+                            return fullDate
+                        }else{
+                            let day=date.getDate()+1
+                            if (day < 10) {
+                                day ="0"+ day;
+                            } 
+                            let fullDate=(day+"/"+month+"/"+date.getFullYear());
+                            return fullDate
+                        } 
+                    }
+
+              }
             } 
     
     const getWinner=()=>{
@@ -189,7 +244,7 @@ const Index=(props)=>{
     }
     
     if(loading) return <Spinner />
-    
+    console.log(nextDayLot())
    
     return(
         <div>

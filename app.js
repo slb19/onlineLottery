@@ -452,7 +452,7 @@ app.get("/winner",async (req,res)=>{
 app.get("/lotteries", async (req, res)=>{
     
     try{
-        const lotteries= await Lottery.query("SELECT lotteryid AS Lottery_No , dateandtimeoflottery AS Date, winner, totalamountofmoney AS Has_Won FROM lotteries.singlelottery ORDER BY lotteryid ")
+        const lotteries= await Lottery.query("SELECT lotteryid AS Lottery_No , dateandtimeoflottery AS Date, winner, totalamountofmoney AS Has_Won FROM lotteries.singlelottery ORDER BY lotteryid DESC")
         res.json(lotteries.rows)
     }catch(error){
         console.log(error)
@@ -468,7 +468,7 @@ app.get("/lotteries", async (req, res)=>{
     const time=getTheTime();
     //console.log(time);
 
-     if(time==="14:43:00"){       
+     if(time==="10:00:00"){       
       
              const fullDate=getTheDate();
         
@@ -483,7 +483,7 @@ app.get("/lotteries", async (req, res)=>{
              }
          });    
      }
-     if(time==="13:19:00"){
+     if(time==="22:00:00"){
         try{
            const lotteryid= await Lottery.query("SELECT lotteryid,totalamountofmoney FROM  lotteries.singlelottery WHERE lotteryid = (SELECT MAX(lotteryid) FROM lotteries.singlelottery)")
            
