@@ -16,9 +16,10 @@ const PreviousLotteries = () => {
      const tableData=()=>{
         return lotteries.map((lottery, index)=>{
             const {lottery_no, date, winner, has_won}= lottery
+            const dateCutTime= date.slice(0,10)
             return <tr key={index}>
                         <td>{lottery_no}</td>
-                        <td>{date}</td>
+                        <td>{dateCutTime}</td>
                         <td>{winner}</td>
                         <td>{has_won}</td>
                     </tr>
@@ -35,9 +36,9 @@ const PreviousLotteries = () => {
      }
 
     return (
-        <div style={{marginTop:"30px"}}>
+        <div >
             <h4>Previous Lotteries</h4>
-            <table>
+            <table style={{margin:"0 auto"}}>
                 <tbody>
                 <tr>{tableHeader()}</tr>
                     {tableData()}

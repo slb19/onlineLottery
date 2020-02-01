@@ -43,8 +43,18 @@ const Lottery= new Client({
 
     const getTheDate=()=>{
         let date=new Date()
-        //let month=date.getMonth()+1
-        let fullDate=date.getDate()+"/"+date.getMonth()+1+"/"+date.getFullYear();
+        let day=date.getDate()
+        let month=date.getMonth()+1
+        let year=date.getFullYear()
+
+        if (day < 10) {
+          day ="0" + day;
+        } 
+        if (month < 10) {
+          month ="0" + month;
+        }
+         
+        let fullDate=day+"/"+month+"/"+year;
             return fullDate
     }
 
@@ -116,7 +126,7 @@ const Lottery= new Client({
     const time=getTheTime();
     //console.log(time)
     if(time > "21:50:00" || time < "10:00:00"){
-        //console.log("why ?")
+        
            return res.json({fail:"Lottery has closed ..Wait for the next one"}) 
     }
     return res.json({ok:"ok"});
@@ -376,22 +386,57 @@ app.put("/updateUsername/:id",[check("newUsername", "username must be more than 
 });
 
 app.get("/winner",async (req,res)=>{
-   
+   //console.log("winner")
     try{
         let fullDate
         const date= new Date()
-        //console.log(date.getMonth())
+        
         const time=getTheTime()
-    
+
+        let day=date.getDate()
+        let month=date.getMonth()+1
+        let year=date.getFullYear()
+       
+        if (day < 10) {
+          day ="0"+ day;
+        } 
+        if (month < 10) {
+          month ="0"+ month;
+        }
+        //console.log(month)
                 if(time > "22:01:00"){
-                   fullDate=date.getDate()+"/"+ date.getMonth()+1 +"/"+date.getFullYear();
-                   //fullDate=getTheDate()
+                   fullDate=day+"/"+month+"/"+year;
                    
                 }else{
-                    fullDate= (date.getDate()-1) +"/"+date.getMonth()+1+"/"+date.getFullYear();
+                    let previousDay
+                    if((day-1)===0 && (month==="01" || month==="02" || month==="04" || month==="06" || month==="08" || month==="09" || month==="11")){
+                        previousDay="31"
+                        month=month-"01"
+                       // console.log(month)
+                        //if(month<10) month="0"+ month
+                    }
+                    else if((day-1)===0 && (month==="05" || month==="07" || month==="04" || month==="10" || month==="12")){
+                        previousDay="30"
+                        month=month-"01"
+                    }
+                    else if((day-1)===0 && (month==="03")){
+                        const leapYear= ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+                            if(leapYear){
+                                previousDay="29"
+                            }else{
+                                previousDay="28"    
+                            }
+                            month=month-"01"
+                    }
+                    else{
+                        if(day<10) previousDay="0"+day-1
+                        previousDay=day-1
+                    }
+                    if(month<10) month="0"+ month
+                    fullDate= previousDay +"/"+month+"/"+year;
                 }
-                
-        //console.log(fullDate)
+              
+        console.log(fullDate)
         const winnerText="SELECT winner,totalamountofmoney,lotteryid FROM lotteries.singlelottery WHERE dateandtimeofopening LIKE upper('%' || $1 || '%')"
         const winnerValues=[fullDate]
         const win= await Lottery.query(winnerText, winnerValues)
@@ -423,7 +468,7 @@ app.get("/lotteries", async (req, res)=>{
     const time=getTheTime();
     //console.log(time);
 
-     if(time==="10:00:00"){       
+     if(time==="14:43:00"){       
       
              const fullDate=getTheDate();
         
@@ -438,7 +483,7 @@ app.get("/lotteries", async (req, res)=>{
              }
          });    
      }
-     if(time==="22:00:00"){
+     if(time==="13:19:00"){
         try{
            const lotteryid= await Lottery.query("SELECT lotteryid,totalamountofmoney FROM  lotteries.singlelottery WHERE lotteryid = (SELECT MAX(lotteryid) FROM lotteries.singlelottery)")
            

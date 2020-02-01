@@ -7,6 +7,7 @@ body{
     margin:0;
     padding:0;
     box-sizing: border-box;
+    
 }
 
 .navb{
@@ -18,7 +19,7 @@ body{
     */
     align-items: center;
     background-color: burlywood;
-    height:10vh
+    height:80px
   }
 
 .title{
@@ -51,6 +52,23 @@ li:hover{
     font-size: 1.1em;
     cursor:pointer;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 2px solid #1a1717;
+    
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color:  	#0275d8 ;
+    color:white
+  }
 
 .form-div{
     text-align:center
@@ -107,6 +125,13 @@ li:hover{
     background-color:#E76769;
     border-radius:5px;
     text-align:center;
-    border:solid #7D7C7C 2px;
+    border:solid #7D7C7C 1px;
     color:white
+}
+
+.back-to-entries{
+    cursor:pointer;
+    text-decoration: underline;
+    float:right;
+    font-size:1.2em
 }

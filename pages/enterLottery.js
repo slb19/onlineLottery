@@ -7,7 +7,12 @@ import RandomUsername from "../components/RandomUsername.js"
 import CustomUsername from "../components/CustomUsername.js"
 import UsersLottery from "../components/UsersLottery.js"
 import Spinner from "../components/layout/Spinner.js" 
+import Spinner2 from "../components/layout/Spinner2.js" 
 import Check from "../components/layout/Check.js" 
+import Description from '../components/Description.js';
+import PreviousLotteries from '../components/PreviousLotteries.js';
+import Contact from '../components/Contact.js';
+import PreviousLotteriesState from "../context/previousLotteries/previousLotteriesState.js"
 
 // let AbortController
 // if (process.browser) {
@@ -38,6 +43,14 @@ const enterLottery=(props)=>{
         newUsername:"",
         email:"",
         });
+
+    const [sideShow , setSideShow]=useState({
+        description:false,
+        previousLotteries:false,
+        contact:false
+    })
+    
+    const [loading2, setLoading2]=useState(false)
     
     let {id}=user
     
@@ -51,6 +64,13 @@ const enterLottery=(props)=>{
             abortController.abort()
         }
    },[user])
+
+   useEffect(()=>{
+        if(sideShow.description) setLoading2(false)
+        if(sideShow.previousLotteries) setLoading2(false)
+        if(sideShow.contact) setLoading2(false)
+    },[sideShow])
+
 
     const getUser=(paymentId)=>{
         fetch(`http://localhost:3000/getUser/${paymentId}`, {
@@ -138,6 +158,18 @@ const okToggler=()=>{
     });
 }
 
+const backToEntries=()=>{
+    setTimeout(()=>{
+        setSideShow({
+            description:false,
+            previousLotteries:false,
+            contact:false
+        })
+        setLoading2(false)
+    }, 500)
+  setLoading2(true)
+}
+
 if(paymentId && user.username===null) getUser(paymentId)
 //if(!user.id && paymentId) return <Spinner/>
 
@@ -152,9 +184,10 @@ return(
  {user.loading  ? <Spinner/>
                 :
                 <Fragment>
-                    <Navbar />
+                    <Navbar setSideShow={setSideShow} setLoading2={setLoading2} sideShow={sideShow}/>
                     <div className='container enter-lottery'>
                         <div className="row">
+                       
                         <div className="col-lg-6 col-md-12 col-sm-12">
         <h3 className="payment-title">Your payment is complete <Check/> </h3>
                 
@@ -176,8 +209,19 @@ return(
                           </div>
 
                           <div className="col-lg-6 col-md-12 col-sm-12">
-                          <h5 className="entries-title">There are {users.length} Entries to this lottery ! money played : {money}</h5>
-                            <UsersLottery  users={users}/>
+                          { (sideShow.description || sideShow.previousLotteries || sideShow.contact) && <p className="text-success back-to-entries" onClick={backToEntries}>Back to Entries</p>}      
+                           { (sideShow.description===false && sideShow.previousLotteries===false && sideShow.contact===false && loading2===false) &&
+                            <div>
+                                 <h5 className="entries-title">There are {users.length} Entries to this lottery ! money played : {money}</h5>
+                                    <UsersLottery  users={users}/>
+                                </div>
+                           }
+                             <div className="container cent">
+                                {loading2 && <Spinner2 />} 
+                                {(sideShow.description && !loading2) && <Description />}
+                                {(sideShow.previousLotteries && !loading2) && <PreviousLotteriesState><PreviousLotteries /> </PreviousLotteriesState>}
+                                {(sideShow.contact && !loading2) && <Contact />}
+                             </div>
                             </div>
                            </div>
                         </div>    

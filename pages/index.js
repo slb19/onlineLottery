@@ -1,4 +1,4 @@
-import React,{useState, useEffect,useContext ,Fragment} from 'react'
+import React,{useState, useEffect,Fragment} from 'react'
 import { withRouter } from 'next/router'
 import Head from 'next/head';
 //import "materialize-css/dist/css/materialize.min.css";
@@ -8,6 +8,7 @@ import Spinner from "../components/layout/Spinner.js"
 import Description from '../components/Description.js';
 import PreviousLotteries from '../components/PreviousLotteries.js';
 import Contact from '../components/Contact.js';
+import Spinner2 from "../components/layout/Spinner2.js" 
 import PreviousLotteriesState from "../context/previousLotteries/previousLotteriesState.js"
 
 const Index=(props)=>{
@@ -22,6 +23,7 @@ const Index=(props)=>{
     const [users, setUsers]=useState([])
     const [money, setMoney]=useState(0)
     const [loading, setLoading]=useState(false)
+    const [loading2, setLoading2]=useState(false)
     const [winner, setWinner]=useState({
         username:"",
         moneyWon:"",
@@ -60,10 +62,13 @@ const Index=(props)=>{
             setCountdown({hours , minutes, seconds})
          },1000)
 
-        //  if(sideShow.previousLotteries){
-        //     getLotteries()
-        //  }
     },[])
+
+    useEffect(()=>{
+        if(sideShow.description) setLoading2(false)
+        if(sideShow.previousLotteries) setLoading2(false)
+        if(sideShow.contact) setLoading2(false)
+    },[sideShow])
 
     const registerHandler=()=>{
   
@@ -154,6 +159,7 @@ const Index=(props)=>{
     const nextDayLot=()=>{
         let date=new Date()
             let month=date.getMonth()+1
+            
                 if(date.getDate()+1>31){
                     let fullDate="01"+"/"+month+"/"+date.getFullYear();
                     return fullDate
@@ -183,6 +189,7 @@ const Index=(props)=>{
     }
     
     if(loading) return <Spinner />
+    
    
     return(
         <div>
@@ -190,7 +197,7 @@ const Index=(props)=>{
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossOrigin="anonymous"/>
                 <link href="styles.css" rel="stylesheet" />
             </Head>
-                <Navbar setSideShow={setSideShow}/>
+                <Navbar setSideShow={setSideShow} setLoading2={setLoading2} sideShow={sideShow} />
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12">
@@ -212,9 +219,11 @@ const Index=(props)=>{
                     </div>
                     <div className="col-lg-6 col-md-12 col-sm-12">
                         <div className="container cent">
-                            {sideShow.description && <Description />}
-                            {sideShow.previousLotteries && <PreviousLotteriesState><PreviousLotteries /> </PreviousLotteriesState>}
-                            {sideShow.contact && <Contact />}
+                            {loading2 && <Spinner2 />} 
+                            {(sideShow.description && !loading2) && <Description />}
+                            {(sideShow.previousLotteries && !loading2) && <PreviousLotteriesState><PreviousLotteries /> </PreviousLotteriesState>}
+                            {(sideShow.contact && !loading2) && <Contact />}
+                            
                         </div>
                        </div>
                     </div>
