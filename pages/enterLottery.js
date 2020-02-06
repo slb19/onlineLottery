@@ -104,7 +104,7 @@ const enterLottery=(props)=>{
             setMoney(data.money)
         }).catch(error=>{
             console.log(error)
-            if(errror.name="AbortError") return;
+            if(error.name="AbortError") return;
         });
     }
 //console.log(users)

@@ -48,7 +48,7 @@ const Index=(props)=>{
            if(!loading) getWinner();
         //
        // console.log("useeffect")        
-    },[]);
+    },[paymentId, loading]);
 
     useEffect(()=>{
        
@@ -139,7 +139,7 @@ const Index=(props)=>{
                         let date=new Date()
                         const monthString=months[date.getMonth()];
 
-        const endtime=`${monthString} ${date.getDate()} ${date.getFullYear()} 22:00:00 GMT+0200`
+        const endtime=`${monthString} ${date.getDate()} ${date.getFullYear()} 21:59:00 GMT+0200`
         
         const t = Date.parse(endtime) - Date.parse(new Date());
         
@@ -244,7 +244,7 @@ const Index=(props)=>{
     }
     
     if(loading) return <Spinner />
-    console.log(nextDayLot())
+    //console.log(nextDayLot())
    
     return(
         <div>
@@ -253,7 +253,7 @@ const Index=(props)=>{
                 <link href="styles.css" rel="stylesheet" />
             </Head>
                 <Navbar setSideShow={setSideShow} setLoading2={setLoading2} sideShow={sideShow} />
-                <div className="container">
+                <div className="container enter-lottery">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <EnterLotteryButton registerHandler={registerHandler} errorRegister={errorRegister} startLoading={startLoading} countdown={countdown}/>
@@ -266,7 +266,7 @@ const Index=(props)=>{
                                             {winner.username===null && <div>Lottery {winner.lotteryid} was cancelled </div>}
                                                  
                     <div>
-                        <p>Entries for the next Lottery will start on {nextDayLot()} at 10:00 and will be open until {nextDayLot()} at 22:00
+                        <p>Entries for the next Lottery will start on {nextDayLot()} at 10:00 and will be open until {nextDayLot()} at 21:59
                             <br />
                              1 minute before the draw
                              </p>

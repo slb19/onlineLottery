@@ -9,9 +9,20 @@ useEffect(()=>{
          
 }/*,[props.errorRegister]*/);
 
-let date=new Date()
-let month=date.getMonth()+1
-let fullDate=date.getDate()+"/"+month+"/"+date.getFullYear();
+const getTheDate=()=>{
+    let date=new Date()
+    let day=date.getDate()
+    let month=date.getMonth()+1
+
+    if (day < 10) {
+        day ="0" + day;
+    } 
+    if (month < 10) {
+        month ="0" + month;
+    }
+    return day+"/"+month+"/"+date.getFullYear();
+}
+
 
     return(
         <Fragment>
@@ -19,7 +30,7 @@ let fullDate=date.getDate()+"/"+month+"/"+date.getFullYear();
             {props.errorRegister && <p>Lottery has closed ..Wait for the next one</p>}
             <h4 className="take-part">Take part to the lottery with 5 euros</h4>
                 <div>
-{!props.errorRegister && <p>Actual Lottery will close in {fullDate} at 21:50 Time Remaining <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></p>}
+                    {!props.errorRegister && <p>Actual Lottery will close in {getTheDate()} at 21:59 Time Remaining <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span></p>}
                     
                 </div>
                 <div className="form-div">   
