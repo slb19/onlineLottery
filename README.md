@@ -1,5 +1,5 @@
 # onlineLottery
 
-Online lottery App build with Node/Express , Next.js and Postgres
+Online lottery App connected with PayPal .Build with Node/Express , Next.js and Postgres
 
 Work on progress...!
